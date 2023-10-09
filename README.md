@@ -1,2 +1,2 @@
 
-Started Code: https://github.com/coding-boot-camp/fantastic-umbrella
+Starter Code: https://github.com/coding-boot-camp/fantastic-umbrella
