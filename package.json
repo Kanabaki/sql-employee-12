@@ -1,0 +1,21 @@
+{
+  "name": "sql-for-employees",
+  "version": "1.0.0",
+  "description": "A sql app for tracking employees",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kanabaki/sql-employee-12"
+  },
+  "author": "kanabaki",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^8.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.3"
+  }
+}
