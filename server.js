@@ -1,8 +1,6 @@
 const express = require("express");
 const inquirer = require("inquirer");
 const mysql = require('mysql2');
-// const sequelize = require("./config/connection");
-// const db = require(db);
 require("dotenv").config();
 
 const app = express();
@@ -36,10 +34,10 @@ inquirer.prompt([
         name: "View all departments",
         value: "viewAllDep",
       },
-      // {
-      //   name: "View all roles",
-      //   value: "viewAllRoles",
-      // },
+      {
+        name: "View all roles",
+        value: "viewAllRoles",
+      },
       // {
       //   name: "View all employees",
       //   value: "viewAllEmp",
@@ -55,17 +53,21 @@ inquirer.prompt([
     }
   ]
 )
-.then( (optionData) => {
+.then((optionData) => {
   // console.log(optionData);
   if (optionData.selections ==  "viewAllDep"){
 console.log("you have selected to view all departments")
-viewAllDep()
-promptCall()
+return viewAllDep()
+
 // console.log( viewAllDep())
-}else if (optionData.selections == "addRole") {
-addRole()
-// promptCall()
-}
+} else if (optionData.selections == "addRole") {
+return addRole()
+
+} else if (optionData.selections == "viewAllRoles") {
+return viewAllRoles()
+  } else {
+    return 
+  }
 })
 }
 
@@ -75,45 +77,61 @@ addRole()
 
 function viewAllDep() {
 db.query("SELECT * FROM department", function (err, results) {
+  console.log("_________________________")
     console.table(results);
-    
+    promptCall()
   })
 }
 
-    // results come back as arrays
-    // should return as sql tables, should SHOW Tables;
-    // after the function is called, then I should be done and go to my menu probably
+function viewAllRoles() {
+  db.query("SELECT * FROM role", function (err, results) {
+    console.log("_________________________")
+      console.table(results);
+      promptCall()
+    })
+  }
   
 
-
-
 function addRole() {
-const rolePrompts = [
-  {
-    type: "input",
-    message: `Enter a Role Title: `,
-    name: "enterTitle",
-  },
-  {
-    type: "input",
-    message: `Enter a Role Salary: `,
-    name: "enterSalary",
-  },
-  {
-    type: "list",
-    message: `Choose a Department ID: `,
-    name: "chooseDep",
-    choices: [
-      /*I have to get the departments somehow, I could loop through the departments and once
-  I get the names then I can pass them as list items here I hope */]
-  },
-  ]
-  inquirer.prompt(rolePrompts)
-  .then((rolePromptParams) => {
-  const addRoleParams = `INSERT INTO role (title, salary, department_id) 
-    VALUES (${enterTitle},${enterSalary},${chooseDep})`
-  addRoleParams(rolePromptParams)
-  })
+
+  db.query("SELECT * FROM department", function (err, results) {
+    const depData = results;
+    const departments = results.map((d) => d.name);
+      console.table(depData);
+      
+      const rolePrompts = [
+        {
+          type: "input",
+          message: `Enter a Role Title: `,
+          name: "title",
+        },
+        {
+          type: "input",
+          message: `Enter a Role Salary: `,
+          name: "salary",
+        },
+        {
+          type: "list",
+          message: `Choose a Department `,
+          name: "dep",
+          choices: departments
+        }];
+        inquirer.prompt(rolePrompts)
+        .then((roleParams) => {
+          // console.log(roleParams)
+          const department_id = depData.filter(department => department.name !== roleParams.dep)[0].id;
+      console.log(department_id)
+        const addRoleQuery = `INSERT INTO role (title, salary, department_id) 
+          VALUES (?,?,?)`
+       db.query(addRoleQuery, [roleParams.title,roleParams.salary, department_id], function (err, results) {
+        console.log("_________________________")
+          viewAllRoles()
+          promptCall()
+        })
+        })
+    })
+
+}
   /** To add a role you need to make user type stuff
    * then you get that data and put it into a sql statement that will make a new item in the table
    then return table so user knows about the change or console log a response
@@ -124,7 +142,7 @@ const rolePrompts = [
 
 
 
-}
+
 
 
 
