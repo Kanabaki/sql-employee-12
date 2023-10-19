@@ -49,6 +49,10 @@ inquirer.prompt([
       },
         // "Add an employee",
         // "Update an employee role"
+      {
+        name: "Exit",
+        value: "exit"
+      }
         ]
     }
   ]
@@ -65,8 +69,9 @@ return addRole()
 
 } else if (optionData.selections == "viewAllRoles") {
 return viewAllRoles()
-  } else {
-    return 
+  } else if (optionData.selections == "exit"){
+    console.log("またあとで！")
+    return db.end();
   }
 })
 }
