@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
 
 // Express middleware
 app.use(express.json());
@@ -38,17 +38,20 @@ inquirer.prompt([
         name: "View all roles",
         value: "viewAllRoles",
       },
-      // {
-      //   name: "View all employees",
-      //   value: "viewAllEmp",
-      // },
+      {
+        name: "View all employees",
+        value: "viewAllEmp",
+      },
         // "Add a department",
       {
         name: "Add a role",
         value: "addRole",
       },
         // "Add an employee",
-        // "Update an employee role"
+        {
+          name: "Update an Employee Role",
+          value: "updateRole"
+        },
       {
         name: "Exit",
         value: "exit"
@@ -60,7 +63,7 @@ inquirer.prompt([
 .then((optionData) => {
   // console.log(optionData);
   if (optionData.selections ==  "viewAllDep"){
-console.log("you have selected to view all departments")
+// console.log("you have selected to view all departments")
 return viewAllDep()
 
 // console.log( viewAllDep())
@@ -69,16 +72,20 @@ return addRole()
 
 } else if (optionData.selections == "viewAllRoles") {
 return viewAllRoles()
-  } else if (optionData.selections == "exit"){
+
+} else if (optionData.selections == "viewAllEmp") {
+  return viewAllEmp()
+
+} else if (optionData.selections == "updateRole") {
+  return updateRole()
+
+} else if (optionData.selections == "exit"){
     console.log("またあとで！")
     return db.end();
   }
 })
 }
 
-// db.query("SELECT * FROM department", function (err, results) {
-//   console.log(results);
-// })
 
 function viewAllDep() {
 db.query("SELECT * FROM department", function (err, results) {
@@ -96,14 +103,21 @@ function viewAllRoles() {
     })
   }
   
+  function viewAllEmp() {
+    db.query("SELECT * FROM employee", function (err, results) {
+      console.log("_________________________")
+        console.table(results);
+        promptCall()
+      })
+    }
 
 function addRole() {
 
   db.query("SELECT * FROM department", function (err, results) {
     const depData = results;
     const departments = results.map((d) => d.name);
-      console.table(depData);
-      
+      // console.table(depData);
+
       const rolePrompts = [
         {
           type: "input",
@@ -137,17 +151,55 @@ function addRole() {
     })
 
 }
-  /** To add a role you need to make user type stuff
-   * then you get that data and put it into a sql statement that will make a new item in the table
-   then return table so user knows about the change or console log a response
-   */
-// const title = 
-// const salary = 
-// department_id =
+// to select role, select which employee you want to update, then 
+function updateRole() {
+db.query("SELECT * FROM employee", function (err, employeesFromDatabase) {
+
+  const employeeFirstNames = employeesFromDatabase.map((e) => e.first_name );
+
+  const promptUserForEmployeeNameandNewRoleID = [
+    {
+    type: "list",
+    message: "Select an Employee to Update their Role",
+    name: "employeeName",
+    choices: employeeFirstNames
+  },
+  {
+    type: "input",
+    message: "Enter a Role ID",
+    name: "newRoleID"
+  }
+  ]
+inquirer.prompt(promptUserForEmployeeNameandNewRoleID)
+.then((userAnswersForEmployeeNameAndNewID) => {
+
+  const employeeNameFromUsersAnswer = userAnswersForEmployeeNameAndNewID.employeeName;
+  const newRoleIDFromUsersAnswer = userAnswersForEmployeeNameAndNewID.newRoleID;
+
+// find loops through employeesFromTheDatabase
+// For every employee in the database we check
+// If that employees first name is equal to the answer 
+// The user answered for "Select an Employee to Update Their Role"
+// And "find" returns that employee object from the database
 
 
+// which allows us to get the id of the employee in the database
+// so that we can query teh database with that id
+// in order to update the correct employee
+  const employeeToUpdate = employeesFromDatabase.find(employee => employee.first_name === employeeNameFromUsersAnswer ) // {id: 5, first_name: "Yui", etc....}
 
 
+  const updateRoleQuery = `UPDATE employee SET role_id = ? WHERE id = ? `
+
+  db.query(updateRoleQuery, [newRoleIDFromUsersAnswer , employeeToUpdate.id], function (err,results) {
+ 
+  viewAllEmp()
+  promptCall()
+})
+})
+  // select an employee to update and their new role and this information is updated in the database
+})
+}
 
 
 
@@ -161,22 +213,6 @@ when a choice is selected, a function is called that makes the table show up in 
 
 
 // UPDATE
-
-
-// role
-// INSERT INTO role 
-
-
-
-// see all employees
-// sequelize.query("SELECT * FROM employee", function (err, results) {
-//   console.log(results);
-// })
-
-// // see all roles
-// sequelize.query("SELECT * FROM role", function (err, results) {
-//   console.log(results);
-// })
 
 // =======================================================================
 // db.sync().then(() => {
