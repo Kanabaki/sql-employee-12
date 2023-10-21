@@ -42,7 +42,10 @@ inquirer.prompt([
         name: "View all employees",
         value: "viewAllEmp",
       },
-        // "Add a department",
+      {
+        name: "Add a Department",
+        value: "addDept",
+      },
       {
         name: "Add a role",
         value: "addRole",
@@ -66,19 +69,22 @@ inquirer.prompt([
 // console.log("you have selected to view all departments")
 return viewAllDep()
 
-// console.log( viewAllDep())
+
+} else if (optionData.selections == "viewAllRoles") {
+  return viewAllRoles()
+  
+} else if (optionData.selections == "viewAllEmp") {
+  return viewAllEmp()
+  
+} else if (optionData.selections == "addDept") {
+  return addDept()
+  
 } else if (optionData.selections == "addRole") {
 return addRole()
 
-} else if (optionData.selections == "viewAllRoles") {
-return viewAllRoles()
-
-} else if (optionData.selections == "viewAllEmp") {
-  return viewAllEmp()
-
 } else if (optionData.selections == "updateRole") {
   return updateRole()
-
+  
 } else if (optionData.selections == "exit"){
     console.log("またあとで！")
     return db.end();
@@ -111,8 +117,31 @@ function viewAllRoles() {
       })
     }
 
-function addRole() {
+function addDept() {
+  db.query("SELECT * FROM department", function (err, results) {
+    // const queryRes = results;
+    const addDeptPrompts = [
+      {
+        type: "input",
+        message: "Enter a new Department Name",
+        name: "newDepName"
+      }
+    ]
+inquirer.prompt(addDeptPrompts)
+.then((newDeptAnsData) => {
+console.log(newDeptAnsData)
+  const addDeptQuery = `INSERT INTO department (name) 
+  VALUES (?)`
+db.query(addDeptQuery, [newDeptAnsData.newDepName], function (err, results) {
+  viewAllDep()
+})
 
+})
+  })
+}
+
+function addRole() {
+  
   db.query("SELECT * FROM department", function (err, results) {
     const depData = results;
     const departments = results.map((d) => d.name);
