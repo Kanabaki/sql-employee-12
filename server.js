@@ -1,7 +1,6 @@
 const express = require("express");
 const inquirer = require("inquirer");
-const mysql = require('mysql2');
-require("dotenv").config();
+const db = require("./config/connection");
 
 const app = express();
 // const PORT = process.env.PORT || 3001;
@@ -10,18 +9,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // ===================== DEVELOP ================================================
-
-// const db = require("./config/connection");
-
-const db = mysql.createConnection(
-  {
-    host: 'localhost',
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: 'employee_db'
-  },
-  console.log(`Connected to the mysql.db`)
-)
 
 function promptCall() {
 inquirer.prompt([
@@ -50,7 +37,10 @@ inquirer.prompt([
         name: "Add a role",
         value: "addRole",
       },
-        // "Add an employee",
+      {
+        name: "Add an Employee",
+        value: "addEmployee",
+      },
         {
           name: "Update an Employee Role",
           value: "updateRole"
@@ -81,6 +71,9 @@ return viewAllDep()
   
 } else if (optionData.selections == "addRole") {
 return addRole()
+
+} else if (optionData.selections == "addEmployee") {
+  return addEmployee()
 
 } else if (optionData.selections == "updateRole") {
   return updateRole()
@@ -134,6 +127,7 @@ console.log(newDeptAnsData)
   VALUES (?)`
 db.query(addDeptQuery, [newDeptAnsData.newDepName], function (err, results) {
   viewAllDep()
+
 })
 
 })
@@ -144,7 +138,7 @@ function addRole() {
   
   db.query("SELECT * FROM department", function (err, results) {
     const depData = results;
-    const departments = results.map((d) => d.name);
+    const departments = results.map((d) => d.name); // this brings back department names
       // console.table(depData);
 
       const rolePrompts = [
@@ -180,7 +174,63 @@ function addRole() {
     })
 
 }
-// to select role, select which employee you want to update, then 
+
+function addEmployee() {
+  db.query("SELECT * FROM employee", function (err, employeesFromDatabase) {
+const addEmployeePrompts = [
+  {
+    type: "input",
+    message: `Enter New Employee's First Name `,
+    name: "firstName",
+  },
+  {
+    type: "input",
+    message: `Enter New Employee's Last Name `,
+    name: "lastName",
+  },
+  {
+    type: "input",
+    message: `Enter New Employee's Role ID `,
+    name: "employeeRoleID",
+  },
+  {
+    type: "input",
+    message: `If this New Employee has a Manager, enter the Employee ID of that Manager.
+If the Employee does not have a Manager, just hit Enter to proceed. \n`,
+    name: "employeeManagerID",
+   default: null
+  },
+]
+inquirer.prompt(addEmployeePrompts)
+.then((ansDataFromNewEmployee) => {
+  console.log(ansDataFromNewEmployee, "this is ansDataFromNewEmployee")
+  const addEmployeeQuery = `INSERT INTO employee (first_name, last_name, role_id, manager_id) 
+VALUES (?,?,?,?)`
+
+const maybeChangeToNull = () => {
+if (ansDataFromNewEmployee.employeeManagerID == "") {
+return null
+}else {
+  return employeeManagerID
+}
+}
+
+// If employeeManagerID is NULL, IT WON'T WRITE CORRECTLY 
+  db.query(addEmployeeQuery, 
+  [ansDataFromNewEmployee.firstName,
+    ansDataFromNewEmployee.lastName,
+    ansDataFromNewEmployee.employeeRoleID,
+  maybeChangeToNull()
+  // ansDataFromNewEmployee.employeeManagerID
+], function (err,results) {
+    viewAllEmp()
+  })
+})
+  })
+}
+
+
+
 function updateRole() {
 db.query("SELECT * FROM employee", function (err, employeesFromDatabase) {
 
