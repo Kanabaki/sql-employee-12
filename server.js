@@ -3,6 +3,7 @@ const db = require("./config/connection");
 // const {viewAllDep,viewAllRoles,viewAllEmp} = require("./functions")
 
 function promptCall() {
+  console.log("")
 inquirer.prompt([
     {
       type:"list",
@@ -279,5 +280,7 @@ inquirer.prompt(promptUserForEmployeeNameandNewRoleID)
   // select an employee to update and their new role and this information is updated in the database
 })
 }
-
+// write the names out, & comment more on what funcs do & stuff
+// MAKE MORE COMMENTS MAKE MORE COMMENTS MAKE MORE COMMMENTS MAKE MORE COMMENTS MAKE MORE COMMENTS
+// MAKE MORE COMMENTS MAKE MORE COMMENTS MAKE MORE COMMENTS MAKE MORE COMMENTS MAKE MORE COMMENTS!!!!!!!!!!!!
 promptCall()
