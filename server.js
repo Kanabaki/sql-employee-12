@@ -1,14 +1,6 @@
-const express = require("express");
 const inquirer = require("inquirer");
 const db = require("./config/connection");
-
-const app = express();
-// const PORT = process.env.PORT || 3001;
-
-// Express middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-// ===================== DEVELOP ================================================
+// const {viewAllDep,viewAllRoles,viewAllEmp} = require("./functions")
 
 function promptCall() {
 inquirer.prompt([
@@ -79,36 +71,37 @@ return addRole()
   return updateRole()
   
 } else if (optionData.selections == "exit"){
-    console.log("またあとで！")
+    console.log("Bye bye!")
     return db.end();
   }
 })
 }
 
-
 function viewAllDep() {
-db.query("SELECT * FROM department", function (err, results) {
-  console.log("_________________________")
-    console.table(results);
-    promptCall()
-  })
-}
-
-function viewAllRoles() {
-  db.query("SELECT * FROM role", function (err, results) {
+  db.query("SELECT * FROM department", function (err, results) {
     console.log("_________________________")
       console.table(results);
       promptCall()
     })
   }
   
-  function viewAllEmp() {
-    db.query("SELECT * FROM employee", function (err, results) {
+  function viewAllRoles() {
+    db.query("SELECT * FROM role", function (err, results) {
       console.log("_________________________")
         console.table(results);
         promptCall()
       })
     }
+    
+// the viewAllEmp has to be a JOIN statement bc you need to be able to see the departments too
+    function viewAllEmp() {
+      db.query("SELECT * FROM employee", function (err, results) {
+        console.log("_________________________")
+          console.table(results);
+          promptCall()
+        })
+      }
+
 
 function addDept() {
   db.query("SELECT * FROM department", function (err, results) {
@@ -214,8 +207,6 @@ return null
   return employeeManagerID
 }
 }
-
-// If employeeManagerID is NULL, IT WON'T WRITE CORRECTLY 
   db.query(addEmployeeQuery, 
   [ansDataFromNewEmployee.firstName,
     ansDataFromNewEmployee.lastName,
@@ -280,20 +271,4 @@ inquirer.prompt(promptUserForEmployeeNameandNewRoleID)
 })
 }
 
-
-
-
-
 promptCall()
-/* I want to send user a SQL Table back
-when a choice is selected, a function is called that makes the table show up in the console */
-// return txt to terminal from the function
-// switch statement, when "View all departments" is selected, call viewAllDep
-
-
-// UPDATE
-
-// =======================================================================
-// db.sync().then(() => {
-  // app.listen(PORT, () => console.log('\n Now listening'));
-// });
