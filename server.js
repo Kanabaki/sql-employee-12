@@ -101,7 +101,16 @@ function viewAllDep() {
           promptCall()
         })
       }
-
+      // JOIN role ON employee.role_id = role.id
+/* This is viewAllEmp code that did not work. returned undefined
+ `SELECT employee.id, employee.first_name, employee.last_name, employee.role_id,
+employee.manager_id, role.id, role.title, role.salary, role.department_id,
+department.id, department.name
+FROM employee 
+LEFT JOIN role 
+ON role.id = employee.role_id 
+LEFT JOIN department
+ON department.id = role.role_id `*/
 
 function addDept() {
   db.query("SELECT * FROM department", function (err, results) {
