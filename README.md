@@ -30,7 +30,6 @@ Link to Demo Video:
 
 
 ## Credits
-Original Starter code from: https://github.com/coding-boot-camp/fantastic-umbrella
 
 Repo referenced for Startup: https://github.com/nramirez686/employeeNavigator
 
