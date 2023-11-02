@@ -96,8 +96,7 @@ function viewAllDep() {
     // employee ids, first names, last names, job titles, departments, salaries, and managers
 // the viewAllEmp has to be a JOIN statement bc you need to be able to see the departments too
     function viewAllEmp() {
-      db.query( `
-SELECT employee.id, employee.first_name, employee.last_name, employee.role_id,employee.manager_id, role.id, role.title, role.salary, role.department_id,department.id, department.nameFROM employee LEFT JOIN role ON role.id = employee.role_id LEFT JOIN departmentON department.id = role.role_id `, function (err, results) {
+      db.query( `SELECT * FROM employee JOIN role ON employee.role_id = role.id`, function (err, results) {
         console.log("_Employee Table ___________________")
         console.log(results, "this is results")  
         console.table(results);
