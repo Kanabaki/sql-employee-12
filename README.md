@@ -11,9 +11,7 @@
 - [Questions](#questions)
 
 ## Description 
-The motivation for building this project was to integrate inquirer and mysql to create a neat content management system.
-SQL Employees was built to serve as an interface that users could navigate to interact with data in a database (in this case being SQL).
-This app provides non-developers with the ability to manage an employee database. Concepts learned include creating a mysql connection for sql queries and protecting it with environment variables. Inquirer was also explored more deeply and made to be more dynamic with more options to choose from than my previous projects. Prepared statements were also learned to react to user input and then perform queries like JOIN, UPDATE, etc. 
+The motivation for building this project was to integrate inquirer and mysql to create a neat content management system. SQL Employees was built to serve as an interface that users could navigate to interact with data in a database (in this case being SQL). This app provides non-developers with the ability to manage an employee database. Concepts learned include creating a mysql connection for sql queries and protecting it with environment variables. Inquirer was also explored more deeply and made to be more dynamic with more options to choose from than my previous projects. Prepared statements were also learned to react to user input and then perform queries like JOIN, UPDATE, etc. 
 
 ## Installation
 Make sure to have your modules and package lock setup with **npm install** if you don't have those already. Next you must verify that you have the SQL database sourced for your queries. If you would like some sample data in your database before you make your queries, you can opt to seed the database now that you are in the SQL shell. Before making queries, make sure you set up your mysql connection in the config directory and input your SQL credentials to allow for the mysql package to read the data from the sourced database. 
@@ -53,5 +51,3 @@ GitHub: https://github.com/Kanabaki
 Email: kagomekanabaki@gmail.com
 
 -Note- Some code was developed under Ismeny Castro who guided main prompt setup with inquirer. Jili Jiang helped develop the exit, viewAllEmp and addRole functions. Also credits to Torrey Taylor with the updateRole function and for addition query guidance. -Note-
-
-
