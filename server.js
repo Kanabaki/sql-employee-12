@@ -39,6 +39,10 @@ inquirer.prompt([
           name: "Update an Employee Role",
           value: "updateRole"
         },
+        {
+          name: "Delete a Department",
+          value: "deleteDepartment"
+        },
       {
         name: "Exit",
         value: "exit"
@@ -71,7 +75,10 @@ return addRole()
 
 } else if (optionData.selections == "updateRole") {
   return updateRole()
-  
+
+} else if (optionData.selections == "deleteDepartment") {
+  return deleteDepartment()
+
 } else if (optionData.selections == "exit"){
     console.log("Bye bye!")
     return db.end();
@@ -235,6 +242,29 @@ return null
   })
 }
 
+function deleteDepartment() {
+    inquirer.prompt([
+      {
+        type: "input",
+        message: "Enter the ID of the Department you would like to remove:",
+        name: "departmentIdToDelete"
+      },
+    ])
+    .then((deleteAnsData) => {
+      const deleteID = deleteAnsData.departmentIdToDelete;
+      const query = "DELETE FROM department WHERE id = ?";
+    db.query(query, [deleteID], function (err, results) {
+        if (err) {
+console.error("Error deleting department! ", err);
+        } else {
+console.log("Department deleted successfully!");
+viewAllDep();
+        }
+      })
+    })
+  };
+
+
 
 
 function updateRole() {
@@ -286,4 +316,5 @@ inquirer.prompt(promptUserForEmployeeNameandNewRoleID)
 })
 }
 
+// `DELETE FROM favorite_books WHERE id = ?`
 promptCall()
