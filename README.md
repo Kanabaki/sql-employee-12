@@ -20,12 +20,12 @@ Make sure to have your modules and package lock setup with **npm install** if yo
 
 Usage Image:
 
-![alt text](path to the image)
+![sql employee demo img](./assets/sql-employee-demo_img.png)
 
 With your terminal open, run the line **node server.js** to start SQL Employee. Using your arrow and enter keys, you can navigate the different options and then follow the prompts to interact with your database of employees that include a table of departments, roles, and employees. To exit the app just simply navigate to the exit option at the bottom or ctr+C. 
 
 Link to Demo Video: 
-
+https://drive.google.com/file/d/1QEMTMsf8Dbc2G0FNhlDg5PqLcfJArN6-/view?usp=sharing
 
 ## Credits
 
