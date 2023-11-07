@@ -50,4 +50,5 @@ GitHub: https://github.com/Kanabaki
 
 Email: kagomekanabaki@gmail.com
 
--Note- Some code was developed under Ismeny Castro who guided main prompt setup with inquirer. Jili Jiang helped develop the exit, viewAllEmp and addRole functions. Also credits to Torrey Taylor with the updateRole function and for addition query guidance. -Note-
+## Notes
+Some code was developed under Ismeny Castro who guided main prompt setup with inquirer. Jili Jiang guided development of the exit, viewAllEmp and addRole functions. Also credits to Torrey Taylor with the updateRole function and for addition query guidance. The template literal troubleshooting of the updated viewAllEmp function was completed under Mark Alfano

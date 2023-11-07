@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const db = require("./config/connection");
 // const {viewAllDep,viewAllRoles,viewAllEmp} = require("./functions")
+const consoleTable = require('console.table')
 
 function promptCall() {
   console.log("")
@@ -95,25 +96,27 @@ function viewAllDep() {
     }
     // employee ids, first names, last names, job titles, departments, salaries, and managers
 // the viewAllEmp has to be a JOIN statement bc you need to be able to see the departments too
-    function viewAllEmp() {
-      db.query( `SELECT * FROM employee JOIN role ON employee.role_id = role.id`, function (err, results) {
-        console.log("_Employee Table ___________________")
-        console.log(results, "this is results")  
+function viewAllEmp() {
+      db.query(`SELECT employee.id, employee.first_name, employee.last_name,
+      employee.manager_id, role.title, role.salary, department.name
+      FROM employee 
+      LEFT JOIN role 
+      ON employee.role_id = role.id
+      LEFT JOIN department
+      ON role.department_id = department.id`, function (err, results) {
+  // console.log(results, "this is results before mapping")
+  // results.map((employee,index) => {
+  //   employee.id = index + 1
+  // })
+    console.log("_Employee Table ___________________________________")
+  console.log("______________________________")
+
+        // console.log(results, "this is results")  
         console.table(results);
           promptCall()
         })
       }
-      // JOIN role ON employee.role_id = role.id
 
-/* This is viewAllEmp code that did not work. returned undefined
- `SELECT employee.id, employee.first_name, employee.last_name, employee.role_id,
-employee.manager_id, role.id, role.title, role.salary, role.department_id,
-department.id, department.name
-FROM employee 
-LEFT JOIN role 
-ON role.id = employee.role_id 
-LEFT JOIN department
-ON department.id = role.role_id `*/
 
 function addDept() {
   db.query("SELECT * FROM department", function (err, results) {
@@ -282,7 +285,5 @@ inquirer.prompt(promptUserForEmployeeNameandNewRoleID)
   // select an employee to update and their new role and this information is updated in the database
 })
 }
-// write the names out, & comment more on what funcs do & stuff
-// MAKE MORE COMMENTS MAKE MORE COMMENTS MAKE MORE COMMMENTS MAKE MORE COMMENTS MAKE MORE COMMENTS
-// MAKE MORE COMMENTS MAKE MORE COMMENTS MAKE MORE COMMENTS MAKE MORE COMMENTS MAKE MORE COMMENTS!!!!!!!!!!!!
+
 promptCall()
