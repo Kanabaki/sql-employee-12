@@ -154,7 +154,7 @@ function addDept() {
     ]
 inquirer.prompt(addDeptPrompts)
 .then((newDeptAnsData) => {
-console.log(newDeptAnsData)
+// console.log(newDeptAnsData)
   const addDeptQuery = `INSERT INTO department (name) 
   VALUES (?)`
 db.query(addDeptQuery, [newDeptAnsData.newDepName], function (err, results) {
@@ -200,7 +200,6 @@ function addRole() {
        db.query(addRoleQuery, [roleParams.title,roleParams.salary, department_id], function (err, results) {
         console.log("_________________________")
           viewAllRoles()
-          promptCall()
         })
         })
     })
@@ -303,7 +302,6 @@ inquirer.prompt(promptUserForEmployeeNameandNewRoleID)
   db.query(updateRoleQuery, [newRoleIDFromUsersAnswer , employeeToUpdate.id], function (err,results) {
  
   viewAllEmp()
-  promptCall()
 })
 })
   // select an employee to update and their new role and this information is updated in the database
@@ -376,4 +374,5 @@ function deleteEmployee() {
   })
 })
 }
+
 promptCall()
