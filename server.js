@@ -43,6 +43,10 @@ inquirer.prompt([
           name: "Delete a Department",
           value: "deleteDepartment"
         },
+        {
+          name: "Delete a Role",
+          value: "deleteRole"
+        },
       {
         name: "Exit",
         value: "exit"
@@ -79,6 +83,9 @@ return addRole()
 } else if (optionData.selections == "deleteDepartment") {
   return deleteDepartment()
 
+} else if (optionData.selections == "deleteRole") {
+  return deleteRole()
+
 } else if (optionData.selections == "exit"){
     console.log("Bye bye!")
     return db.end();
@@ -86,18 +93,21 @@ return addRole()
 })
 }
 
+// ============== VIEW ====================================================
 function viewAllDep() {
   db.query("SELECT * FROM department", function (err, results) {
-    console.log("_________________________")
+    console.log("\n__Departments___________________\n")
       console.table(results);
+    console.log("________________________________\n")
       promptCall()
     })
   }
   
   function viewAllRoles() {
     db.query("SELECT * FROM role", function (err, results) {
-      console.log("_________________________")
+      console.log("\n__Roles____________________________________________\n")
         console.table(results);
+      console.log("___________________________________________________\n")
         promptCall()
       })
     }
@@ -115,16 +125,16 @@ function viewAllEmp() {
   // results.map((employee,index) => {
   //   employee.id = index + 1
   // })
-    console.log("_Employee Table ___________________________________")
-  console.log("______________________________")
+    console.log("\n_____Employees _________________________________________________________________________________\n")
 
         // console.log(results, "this is results")  
         console.table(results);
+    console.log("________________________________________________________________________________________________\n")
           promptCall()
         })
       }
 
-
+// ============== ADD ====================================================
 function addDept() {
   db.query("SELECT * FROM department", function (err, results) {
     // const queryRes = results;
@@ -242,31 +252,8 @@ return null
   })
 }
 
-function deleteDepartment() {
-    inquirer.prompt([
-      {
-        type: "input",
-        message: "Enter the ID of the Department you would like to remove:",
-        name: "departmentIdToDelete"
-      },
-    ])
-    .then((deleteAnsData) => {
-      const deleteID = deleteAnsData.departmentIdToDelete;
-      const query = "DELETE FROM department WHERE id = ?";
-    db.query(query, [deleteID], function (err, results) {
-        if (err) {
-console.error("Error deleting department! ", err);
-        } else {
-console.log("Department deleted successfully!");
-viewAllDep();
-        }
-      })
-    })
-  };
 
-
-
-
+// ============== UPDATE ====================================================
 function updateRole() {
 db.query("SELECT * FROM employee", function (err, employeesFromDatabase) {
 
@@ -316,5 +303,49 @@ inquirer.prompt(promptUserForEmployeeNameandNewRoleID)
 })
 }
 
-// `DELETE FROM favorite_books WHERE id = ?`
+// ============== DELETE ====================================================
+function deleteDepartment() {
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "Enter the ID of the Department you would like to remove:",
+      name: "departmentIdToDelete"
+    },
+  ])
+  .then((deleteAnsData) => {
+    const deleteID = deleteAnsData.departmentIdToDelete;
+    const queryTemplate = "DELETE FROM department WHERE id = ?";
+  db.query(queryTemplate, [deleteID], function (err, results) {
+      if (err) {
+console.error("Error deleting Department! ", err);
+      } else {
+console.log("Department deleted successfully!");
+viewAllDep();
+      }
+    })
+  })
+};
+
+function deleteRole() {
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "Enter the ID of the Role you would like to remove:",
+      name: "roleIdToDelete"
+    },
+  ])
+  .then((deleteRoleData) => {
+    const deleteID = deleteRoleData.roleIdToDelete;
+    const queryTemplate = "DELETE FROM role WHERE id = ?";
+    db.query(queryTemplate, [deleteID], function (err, results) {
+      if (err) {
+        console.error("Error deleting Role! ", err);
+      } else {
+        console.log("Role deleted successfully!");
+      viewAllDep();
+      }
+    })
+  })
+}
+
 promptCall()
