@@ -47,6 +47,10 @@ inquirer.prompt([
           name: "Delete a Role",
           value: "deleteRole"
         },
+        {
+          name: "Delete an Employee",
+          value: "deleteEmployee"
+        },
       {
         name: "Exit",
         value: "exit"
@@ -85,6 +89,9 @@ return addRole()
 
 } else if (optionData.selections == "deleteRole") {
   return deleteRole()
+
+} else if (optionData.selections == "deleteEmployee") {
+  return deleteEmployee()
 
 } else if (optionData.selections == "exit"){
     console.log("Bye bye!")
@@ -228,7 +235,7 @@ If the Employee does not have a Manager, just hit Enter to proceed. \n`,
 ]
 inquirer.prompt(addEmployeePrompts)
 .then((ansDataFromNewEmployee) => {
-  console.log(ansDataFromNewEmployee, "this is ansDataFromNewEmployee")
+  // console.log(ansDataFromNewEmployee, "this is ansDataFromNewEmployee")
   const addEmployeeQuery = `INSERT INTO employee (first_name, last_name, role_id, manager_id) 
 VALUES (?,?,?,?)`
 
@@ -342,10 +349,31 @@ function deleteRole() {
         console.error("Error deleting Role! ", err);
       } else {
         console.log("Role deleted successfully!");
-      viewAllDep();
+      viewAllRoles();
       }
     })
   })
 }
 
+function deleteEmployee() {
+  inquirer.prompt([
+  {
+    type: "input",
+    message: "Enter the ID of the Employee you would like to remove:",
+    name: "employeeIdToDelete"
+  },
+  ])
+.then((deleteEmployeeData) => {
+  const deleteID = deleteEmployeeData.employeeIdToDelete;
+  const queryTemplate = "DELETE FROM employee WHERE id = ?";
+  db.query(queryTemplate, [deleteID], function (err, results) {
+    if (err) {
+      console.error("Error deleting Employee! ", err);
+    } else {
+      console.log("Employee deleted successfully!");
+    viewAllEmp();
+    }
+  })
+})
+}
 promptCall()
